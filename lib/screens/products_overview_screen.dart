@@ -47,10 +47,12 @@ class ProductsOverViewScreen extends StatelessWidget {
           title: const Text("Product overview screen"),
         ),
         body: GridView.builder(
+          padding: const EdgeInsets.all(10.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio: 3 / 2,
             crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
           ),
           itemBuilder: (ctx, i) {
             return ProductItem(
