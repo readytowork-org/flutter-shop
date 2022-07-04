@@ -7,7 +7,8 @@ class ProductItem extends StatelessWidget {
   final String? description;
   final String? imageUrl;
 
-  const ProductItem(this.id, this.title, this.description, this.imageUrl, {Key? key})
+  const ProductItem(this.id, this.title, this.description, this.imageUrl,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -31,8 +32,10 @@ class ProductItem extends StatelessWidget {
         ),
         child: GestureDetector(
           onTap: () {
-            Navigator.of(context)
-                .pushNamed(ProductDetail.routeName, arguments: id);
+            Navigator.of(context).pushNamed(
+              ProductDetail.routeName,
+              arguments: id,
+            );
           },
           child: Image.network(
             imageUrl!,
