@@ -10,7 +10,9 @@ class ProductDetail extends StatelessWidget {
     final id = ModalRoute.of(context)?.settings.arguments as String;
     final product = Provider.of<ProductsProvider>(
       context,
-      listen: false, //do not rebuild widgit if Product list changes I.E added, edited, deletedd. Default set to true
+      listen: false,
+      //do not rebuild widgit if Product list changes I.E added,
+      //edited, deletedd. Default set to true
     ).findById(id);
     return Scaffold(
       appBar: AppBar(
