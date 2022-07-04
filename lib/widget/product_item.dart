@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../screens/product_detail.dart';
 
 class ProductItem extends StatelessWidget {
   final String? id;
@@ -6,8 +7,9 @@ class ProductItem extends StatelessWidget {
   final String? description;
   final String? imageUrl;
 
-  ProductItem(this.id, this.title, this.description, this.imageUrl, {Key? key})
+  const ProductItem(this.id, this.title, this.description, this.imageUrl, {Key? key})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -27,9 +29,15 @@ class ProductItem extends StatelessWidget {
             color: Theme.of(context).colorScheme.secondary,
           ),
         ),
-        child: Image.network(
-          imageUrl!,
-          fit: BoxFit.cover,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context)
+                .pushNamed(ProductDetail.routeName, arguments: id);
+          },
+          child: Image.network(
+            imageUrl!,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
