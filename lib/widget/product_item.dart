@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
 import '../models/product.dart';
-import '../screens/product_detail.dart';
+import '../screens/product_detail_screen.dart';
 
 class ProductItem extends StatelessWidget {
   //Method 1: Using provider, this method rebuilds whole widget if Product changes
