@@ -42,7 +42,6 @@ class ProductsProvider with ChangeNotifier {
   }
 
   List<Product> get favouriteItems {
-    print("favourites");
     return _items.where((item) => item.isFavourite).toList();
   }
 
