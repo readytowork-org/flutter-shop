@@ -37,7 +37,7 @@ class SideDrawer extends StatelessWidget {
             Navigator.of(context).pushReplacementNamed('/');
           }),
           _buildDrawer("Orders", Icons.payment, () {
-            Navigator.of(context).pushNamed(OrdersScreen.routeName);
+            Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
           })
         ],
       ),
