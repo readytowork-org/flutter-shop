@@ -21,7 +21,6 @@ class _ProductsOverViewScreenState extends State<ProductsOverViewScreen> {
   var _showOnlyFavourite = false;
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<Cart>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Our Products"),
