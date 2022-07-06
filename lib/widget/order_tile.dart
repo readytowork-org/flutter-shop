@@ -8,6 +8,7 @@ class OrderTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      print(order);
     return Card(
       margin: const EdgeInsets.symmetric(
         vertical: 8,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/widget/order_tile.dart';
+
+import '../widget/drawer.dart';
+import '../widget/order_tile.dart';
 import '../providers/Order.dart';
 
 class OrdersScreen extends StatelessWidget {
@@ -14,16 +16,13 @@ class OrdersScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Your orders"),
       ),
-      body: Column(
-        children: <Widget>[
-          ListView.builder(
-            itemBuilder: (ctx, i) => OrderTile(
-              order: orderData.orders[i],
-            ),
-            itemCount: orderData.orders.length,
-          ),
-        ],
+      body: ListView.builder(
+        itemBuilder: (ctx, i) => OrderTile(
+          order: orderData.orders[i],
+        ),
+        itemCount: orderData.orders.length,
       ),
+      drawer: const SideDrawer(),
     );
   }
 }
