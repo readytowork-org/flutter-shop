@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/providers/Order.dart';
 import 'package:shop_app/widget/cart_tile.dart';
 import '../providers/cart.dart';
 
@@ -51,7 +52,7 @@ class CartScreen extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               itemBuilder: (ctx, i) {
-                 inspect(cart);
+                inspect(cart);
                 return CartTile(
                   id: cart.items.values.toList()[i].id,
                   productId: cart.items.keys.toList()[i],
@@ -74,7 +75,13 @@ class CartScreen extends StatelessWidget {
                 'Checkout',
                 style: TextStyle(fontSize: 16),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Provider.of<Order>(context, listen: false).addOrder(
+                  cart.items.values.toList(),
+                  cart.totalAmount,
+                );
+                cart.clearCart();
+              },
             ),
           ),
         ],

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'dart:developer';
+import 'package:flutter/foundation.dart';
+import 'dart:developer'; //for debug purpose only
 class CartItem {
   final String? id;
   final String? title;
@@ -15,7 +15,7 @@ class CartItem {
 }
 
 class Cart with ChangeNotifier {
-  final Map<String, CartItem> _items = {};
+  late Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {
     return {..._items};
@@ -60,11 +60,17 @@ class Cart with ChangeNotifier {
       );
     }
    inspect(_items);
+   
     notifyListeners();
   }
 
   void removeItemFromCart(String id){
     _items.remove(id);
     notifyListeners();
+  }
+
+  void clearCart(){
+    _items = {};
+  notifyListeners();
   }
 }
