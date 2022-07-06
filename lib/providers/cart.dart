@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'dart:developer'; //for debug purpose only
+
 class CartItem {
   final String? id;
   final String? title;
@@ -59,18 +60,37 @@ class Cart with ChangeNotifier {
         ),
       );
     }
-   inspect(_items);
-   
+    inspect(_items);
+
     notifyListeners();
   }
 
-  void removeItemFromCart(String id){
+  void removeItemFromCart(String id) {
     _items.remove(id);
     notifyListeners();
   }
 
-  void clearCart(){
+  void clearCart() {
     _items = {};
-  notifyListeners();
+    notifyListeners();
+  }
+
+  void removeSingleItem(String productId) {
+    if (!_items.containsKey(productId)) {
+      return;
+    }
+    if (_items[productId]!.quantity! > 1) {
+      _items.update(
+          productId,
+          (existingProduct) => CartItem(
+                id: existingProduct.id,
+                title: existingProduct.title,
+                quantity: existingProduct.quantity! - 1,
+                price: existingProduct.price,
+              ));
+    } else {
+      _items.remove(productId);
+    }
+    notifyListeners();
   }
 }
