@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/providers/products_provider.dart';
-import 'package:shop_app/widget/user_product_tile.dart';
+import '../providers/products_provider.dart';
+import '../widget/user_product_tile.dart';
 import '../widget/drawer.dart';
 
 class UserProductScreen extends StatelessWidget {
@@ -22,9 +22,14 @@ class UserProductScreen extends StatelessWidget {
       ),
       drawer: const SideDrawer(),
       body: ListView.builder(
-        itemBuilder: (ctx, i) => UserProductTile(
-          title: productData.items[i].title,
-          imageUrl: productData.items[i].imageUrl,
+        itemBuilder: (ctx, i) => Column(
+          children: <Widget>[
+            UserProductTile(
+              title: productData.items[i].title,
+              imageUrl: productData.items[i].imageUrl,
+            ),
+            const Divider(),
+          ],
         ),
         itemCount: productData.items.length,
       ),

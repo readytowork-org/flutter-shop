@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shop_app/screens/user_product_screen.dart';
+import '../screens/user_product_screen.dart';
 import '../screens/orders_screen.dart';
 
 class SideDrawer extends StatelessWidget {
