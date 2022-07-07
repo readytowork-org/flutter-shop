@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/screens/user_product_screen.dart';
 import '../screens/orders_screen.dart';
 
 class SideDrawer extends StatelessWidget {
@@ -36,9 +37,16 @@ class SideDrawer extends StatelessWidget {
           _buildDrawer("Shop", Icons.shop, () {
             Navigator.of(context).pushReplacementNamed('/');
           }),
+          const Divider(),
           _buildDrawer("Orders", Icons.payment, () {
             Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
-          })
+          }),
+          const Divider(),
+          _buildDrawer("Manage Products", Icons.edit, () {
+            Navigator.of(context)
+                .pushReplacementNamed(UserProductScreen.routeName);
+          }),
+          const Dialog(),
         ],
       ),
     );
