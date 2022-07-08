@@ -41,6 +41,14 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
 
   void _updateImageUrl() {
     if (!_imageUrlNode.hasFocus) {
+      if (_imageUrlController.text.isEmpty ||
+          !_imageUrlController.text.startsWith('http') ||
+          !_imageUrlController.text.startsWith('https') &&
+          !_imageUrlController.text.endsWith('jpg') ||
+          !_imageUrlController.text.endsWith('jpge') ||
+          !_imageUrlController.text.endsWith('png')) {
+        return;
+      }
       setState(() {});
     }
   }
@@ -104,6 +112,12 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                   if (value!.isEmpty) {
                     return 'Please enter the value';
                   }
+                  if (double.tryParse(value) == null) {
+                    return "Please enter a valid number";
+                  }
+                  if (double.parse(value) <= 0) {
+                    return 'Please enter a number greater than zero.';
+                  }
                   return null;
                 },
                 onSaved: (value) {
@@ -111,7 +125,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                     id: _editedProduct.id,
                     title: _editedProduct.title,
                     description: _editedProduct.description,
-                    price: double.parse(value as String),
+                    price: double.tryParse(value as String),
                     imageUrl: _editedProduct.imageUrl,
                   );
                 },
@@ -129,6 +143,9 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter the value';
+                  }
+                  if (value.length < 10) {
+                    return 'Should be longer than 10 characters';
                   }
                   return null;
                 },
@@ -183,6 +200,15 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter the value';
+                        }
+                        if (!value.startsWith('http') ||
+                            !value.startsWith('https')) {
+                          return "Please enter correct url";
+                        }
+                        if (!value.endsWith('jpg') ||
+                            !value.endsWith('jpge') ||
+                            !value.endsWith('png')) {
+                          return "Please enter correct url with image";
                         }
                         return null;
                       },
