@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_app/models/product.dart';
+import 'package:shop_app/providers/products_provider.dart';
 
 class AddEditProductScreen extends StatefulWidget {
   static const routeName = "/add-edit-product";
@@ -44,7 +46,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
       if (_imageUrlController.text.isEmpty ||
           !_imageUrlController.text.startsWith('http') ||
           !_imageUrlController.text.startsWith('https') &&
-          !_imageUrlController.text.endsWith('jpg') ||
+              !_imageUrlController.text.endsWith('jpg') ||
           !_imageUrlController.text.endsWith('jpge') ||
           !_imageUrlController.text.endsWith('png')) {
         return;
@@ -59,7 +61,9 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
       return;
     }
     _form.currentState!.save();
-    inspect(_editedProduct);
+    Provider.of<ProductsProvider>(context, listen: false)
+        .addProduct(_editedProduct);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -137,6 +141,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                 maxLines: 3,
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.multiline,
+                focusNode: _descriptionNode,
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_imageUrlNode);
                 },
