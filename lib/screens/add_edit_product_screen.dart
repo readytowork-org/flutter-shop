@@ -46,7 +46,11 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
   }
 
   void _saveForm() {
-    _form.currentState?.save();
+    final isValid = _form.currentState!.validate();
+    if (isValid) {
+      return;
+    }
+    _form.currentState!.save();
     inspect(_editedProduct);
   }
 
@@ -70,6 +74,12 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_priceNode);
                 },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter the value';
+                  }
+                  return null;
+                },
                 onSaved: (value) {
                   _editedProduct = Product(
                     id: _editedProduct.id,
@@ -87,6 +97,15 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
                 focusNode: _priceNode,
+                onFieldSubmitted: (_) {
+                  FocusScope.of(context).requestFocus(_descriptionNode);
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter the value';
+                  }
+                  return null;
+                },
                 onSaved: (value) {
                   _editedProduct = Product(
                     id: _editedProduct.id,
@@ -106,6 +125,12 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                 keyboardType: TextInputType.multiline,
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_imageUrlNode);
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter the value';
+                  }
+                  return null;
                 },
                 onSaved: (value) {
                   _editedProduct = Product(
@@ -154,6 +179,12 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                       focusNode: _imageUrlNode,
                       onEditingComplete: () {
                         setState(() {});
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter the value';
+                        }
+                        return null;
                       },
                       onFieldSubmitted: (_) {
                         _saveForm();
