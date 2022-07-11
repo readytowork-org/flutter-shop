@@ -53,24 +53,22 @@ class ProductsProvider with ChangeNotifier {
     return _items.firstWhere((item) => item.id == id);
   }
 
-  Future<void> addProduct(Product product) {
+  Future<void> addProduct(Product product) async {
     const url =
         "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products.json";
-
-    return http
-        .post(
-      Uri.parse(url),
-      body: jsonEncode(
-        {
-          "title": product.title,
-          "price": product.price,
-          "description": product.description,
-          "isFavourite": product.isFavourite,
-          "imageUrl": product.imageUrl
-        },
-      ),
-    )
-        .then((response) {
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: jsonEncode(
+          {
+            "title": product.title,
+            "price": product.price,
+            "description": product.description,
+            "isFavourite": product.isFavourite,
+            "imageUrl": product.imageUrl
+          },
+        ),
+      );
       inspect(response);
       final newProduct = Product(
         id: jsonDecode(response.body)["name"],
@@ -81,10 +79,10 @@ class ProductsProvider with ChangeNotifier {
       );
       _items.add(newProduct);
       notifyListeners();
-    }).catchError((error) {
-      inspect(error);
+    } catch (error) {
+      // inspect(error);
       throw error;
-    });
+    }
   }
 
   void updateProduct(String id, Product updateProduct) {
