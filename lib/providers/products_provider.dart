@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import '../models/product.dart';
@@ -56,25 +57,31 @@ class ProductsProvider with ChangeNotifier {
     const url =
         "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products.json";
 
-    http.post(Uri.parse(url),
-        body: jsonEncode(
-          {
-            "title": product.title,
-            "price": product.price,
-            "description": product.description,
-            "isFavourite": product.isFavourite,
-            "imageUrl": product.imageUrl
-          },
-        ));
-    final newProduct = Product(
-      id: DateTime.now().toString(),
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      imageUrl: product.imageUrl,
-    );
-    _items.add(newProduct);
-    notifyListeners();
+    http
+        .post(
+      Uri.parse(url),
+      body: jsonEncode(
+        {
+          "title": product.title,
+          "price": product.price,
+          "description": product.description,
+          "isFavourite": product.isFavourite,
+          "imageUrl": product.imageUrl
+        },
+      ),
+    )
+        .then((response) {
+          inspect(response);
+      final newProduct = Product(
+        id: jsonDecode(response.body)["name"],
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+      );
+      _items.add(newProduct);
+      notifyListeners();
+    });
   }
 
   void updateProduct(String id, Product updateProduct) {
