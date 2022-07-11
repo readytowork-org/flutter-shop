@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import '../screens/add_edit_product_screen.dart';
 
 class UserProductTile extends StatelessWidget {
+  final String? id;
   final String? title;
   final String? imageUrl;
 
   const UserProductTile({
+    required this.id,
     required this.title,
     required this.imageUrl,
     Key? key,
@@ -21,7 +24,9 @@ class UserProductTile extends StatelessWidget {
         width: 100,
         child: Row(children: <Widget>[
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(AddEditProductScreen.routeName, arguments: id);
+            },
             icon: const Icon(
               Icons.edit,
             ),

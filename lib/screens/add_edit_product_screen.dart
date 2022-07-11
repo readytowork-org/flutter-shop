@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/models/product.dart';
-import 'package:shop_app/providers/products_provider.dart';
+import '../models/product.dart';
+import '../providers/products_provider.dart';
 
 class AddEditProductScreen extends StatefulWidget {
   static const routeName = "/add-edit-product";
@@ -21,14 +21,48 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
 
   final _imageUrlController = TextEditingController();
 
-  var _editedProduct =
-      Product(id: null, title: '', description: '', price: 0, imageUrl: '');
+  var _editedProduct = Product(
+    id: null,
+    title: '',
+    description: '',
+    price: 0,
+    imageUrl: '',
+  );
+
+  var _isInit = true;
+  var _inititalValue = {
+    'title': '',
+    'price': '',
+    'description': '',
+  };
 
   @override
   void initState() {
     _imageUrlNode.addListener(_updateImageUrl);
     // TODO: implement initState
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      if (ModalRoute.of(context)!.settings.arguments != null) {
+        final productId = ModalRoute.of(context)!.settings.arguments as String;
+        _editedProduct = Provider.of<ProductsProvider>(context, listen: false)
+            .findById(productId);
+        _inititalValue = {
+          'title': _editedProduct.title!,
+          'price': _editedProduct.price.toString(),
+          'description': _editedProduct.description!,
+          'imageUrl': ''
+        };
+        _imageUrlController.text = _editedProduct.imageUrl!;
+      }
+    }
+    _isInit = false;
+
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override
@@ -61,8 +95,15 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
       return;
     }
     _form.currentState!.save();
-    Provider.of<ProductsProvider>(context, listen: false)
-        .addProduct(_editedProduct);
+
+    if (_editedProduct.id != null) {
+      Provider.of<ProductsProvider>(context, listen: false)
+          .updateProduct(_editedProduct.id!, _editedProduct);
+    } else {
+      Provider.of<ProductsProvider>(context, listen: false)
+          .addProduct(_editedProduct);
+    }
+
     Navigator.of(context).pop();
   }
 
@@ -79,6 +120,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
           child: ListView(
             children: <Widget>[
               TextFormField(
+                initialValue: _inititalValue['title'],
                 decoration: const InputDecoration(
                   labelText: 'Product Title',
                 ),
@@ -94,15 +136,16 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                 },
                 onSaved: (value) {
                   _editedProduct = Product(
-                    id: _editedProduct.id,
-                    title: value,
-                    description: _editedProduct.description,
-                    price: _editedProduct.price,
-                    imageUrl: _editedProduct.imageUrl,
-                  );
+                      id: _editedProduct.id,
+                      title: value,
+                      description: _editedProduct.description,
+                      price: _editedProduct.price,
+                      imageUrl: _editedProduct.imageUrl,
+                      isFavourite: _editedProduct.isFavourite);
                 },
               ),
               TextFormField(
+                initialValue: _inititalValue['price'],
                 decoration: const InputDecoration(
                   labelText: 'Price',
                 ),
@@ -126,15 +169,16 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                 },
                 onSaved: (value) {
                   _editedProduct = Product(
-                    id: _editedProduct.id,
-                    title: _editedProduct.title,
-                    description: _editedProduct.description,
-                    price: double.tryParse(value as String),
-                    imageUrl: _editedProduct.imageUrl,
-                  );
+                      id: _editedProduct.id,
+                      title: _editedProduct.title,
+                      description: _editedProduct.description,
+                      price: double.tryParse(value as String),
+                      imageUrl: _editedProduct.imageUrl,
+                      isFavourite: _editedProduct.isFavourite);
                 },
               ),
               TextFormField(
+                initialValue: _inititalValue['description'],
                 decoration: const InputDecoration(
                   labelText: 'Description',
                 ),
@@ -161,6 +205,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                     description: value,
                     price: _editedProduct.price,
                     imageUrl: _editedProduct.imageUrl,
+                    isFavourite: _editedProduct.isFavourite,
                   );
                 },
               ),
@@ -227,6 +272,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                           description: _editedProduct.description,
                           price: _editedProduct.price,
                           imageUrl: value,
+                          isFavourite: _editedProduct.isFavourite,
                         );
                       },
                     ),
