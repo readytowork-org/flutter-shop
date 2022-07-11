@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import 'package:http/http.dart' as http;
 
 class ProductsProvider with ChangeNotifier {
   final List<Product> _items = [
@@ -50,6 +53,19 @@ class ProductsProvider with ChangeNotifier {
   }
 
   void addProduct(Product product) {
+    const url =
+        "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products.json";
+
+    http.post(Uri.parse(url),
+        body: jsonEncode(
+          {
+            "title": product.title,
+            "price": product.price,
+            "description": product.description,
+            "isFavourite": product.isFavourite,
+            "imageUrl": product.imageUrl
+          },
+        ));
     final newProduct = Product(
       id: DateTime.now().toString(),
       title: product.title,
@@ -61,15 +77,15 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateProduct(String id, Product updateProduct){
-   final prodIndex = _items.indexWhere((item) => item.id == id);
-   if (prodIndex >= 0) {
-     _items[prodIndex] = updateProduct;
-   }
-   notifyListeners();
+  void updateProduct(String id, Product updateProduct) {
+    final prodIndex = _items.indexWhere((item) => item.id == id);
+    if (prodIndex >= 0) {
+      _items[prodIndex] = updateProduct;
+    }
+    notifyListeners();
   }
 
-  void deleteProduct(String id){
+  void deleteProduct(String id) {
     _items.removeWhere((item) => item.id == id);
     notifyListeners();
   }

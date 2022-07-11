@@ -77,11 +77,10 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
 
   void _updateImageUrl() {
     if (!_imageUrlNode.hasFocus) {
-      if (_imageUrlController.text.isEmpty ||
-          !_imageUrlController.text.startsWith('http') ||
-          !_imageUrlController.text.startsWith('https') &&
-              !_imageUrlController.text.endsWith('jpg') ||
-          !_imageUrlController.text.endsWith('jpge') ||
+      if (!_imageUrlController.text.startsWith('http') &&
+          !_imageUrlController.text.startsWith('https') ||
+              !_imageUrlController.text.endsWith('jpg') &&
+          !_imageUrlController.text.endsWith('jpge') &&
           !_imageUrlController.text.endsWith('png')) {
         return;
       }
@@ -91,7 +90,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
 
   void _saveForm() {
     final isValid = _form.currentState!.validate();
-    if (isValid) {
+    if (!isValid) {
       return;
     }
     _form.currentState!.save();
@@ -251,12 +250,12 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                         if (value!.isEmpty) {
                           return 'Please enter the value';
                         }
-                        if (!value.startsWith('http') ||
+                        if (!value.startsWith('http') &&
                             !value.startsWith('https')) {
                           return "Please enter correct url";
                         }
-                        if (!value.endsWith('jpg') ||
-                            !value.endsWith('jpge') ||
+                        if (!value.endsWith('jpg') &&
+                            !value.endsWith('jpge') &&
                             !value.endsWith('png')) {
                           return "Please enter correct url with image";
                         }
