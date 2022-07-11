@@ -98,7 +98,7 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts() async {
     const url =
         "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products.json";
     try {
@@ -116,6 +116,7 @@ class ProductsProvider with ChangeNotifier {
         ));
       });
       _items = decodedProduct;
+      notifyListeners();
     } catch (e) {
       throw e;
     }

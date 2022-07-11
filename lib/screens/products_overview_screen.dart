@@ -40,9 +40,10 @@ class _ProductsOverViewScreenState extends State<ProductsOverViewScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<ProductsProvider>(context).fetchAndSetProducts();
-      setState(() {
-        _isLoading = false;
+      Provider.of<ProductsProvider>(context).fetchAndSetProducts().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
       });
     }
     _isInit = false;
@@ -97,7 +98,9 @@ class _ProductsOverViewScreenState extends State<ProductsOverViewScreen> {
           )
         ],
       ),
-      body: _isLoading? const CircularProgressIndicator(): ProductsGrid(_showOnlyFavourite),
+      body: _isLoading
+          ? const Center (child: CircularProgressIndicator())
+          : ProductsGrid(_showOnlyFavourite),
       drawer: const SideDrawer(),
     );
   }
