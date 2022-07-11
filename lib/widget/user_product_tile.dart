@@ -39,6 +39,12 @@ class UserProductTile extends StatelessWidget {
             onPressed: () {
               Provider.of<ProductsProvider>(context, listen: false)
                   .deleteProduct(id!);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Item added to your cart."),
+                  duration: Duration(seconds: 2),
+                ),
+              );
             },
             icon: const Icon(
               Icons.delete,
