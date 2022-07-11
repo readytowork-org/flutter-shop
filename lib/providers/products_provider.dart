@@ -85,12 +85,29 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  void updateProduct(String id, Product updateProduct) {
-    final prodIndex = _items.indexWhere((item) => item.id == id);
-    if (prodIndex >= 0) {
-      _items[prodIndex] = updateProduct;
+  Future<void> updateProduct(String id, Product updateProduct) async {
+    try {
+      final url =
+          "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products/${id}.json";
+      final response = await http.patch(
+        Uri.parse(url),
+        body: jsonEncode(
+          {
+            "title": updateProduct.title,
+            "price": updateProduct.price,
+            "description": updateProduct.description,
+            "imageUrl": updateProduct.imageUrl,
+          },
+        ),
+      );
+      final prodIndex = _items.indexWhere((item) => item.id == id);
+      if (prodIndex >= 0) {
+        _items[prodIndex] = updateProduct;
+      }
+      notifyListeners();
+    } catch (e) {
+      throw e;
     }
-    notifyListeners();
   }
 
   void deleteProduct(String id) {
@@ -103,12 +120,13 @@ class ProductsProvider with ChangeNotifier {
         "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products.json";
     try {
       final response = await http.get(Uri.parse(url));
-      inspect(response);
+      print('From firebase');
+      inspect(response.body);
       final loadedProducts = jsonDecode(response.body) as Map<String, dynamic>;
       final List<Product> decodedProduct = [];
       loadedProducts.forEach((prodId, productData) {
         decodedProduct.add(Product(
-          id: productData['id'],
+          id: prodId,
           title: productData['title'],
           description: productData['description'],
           price: productData['price'],

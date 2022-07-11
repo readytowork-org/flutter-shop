@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/screens/add_edit_product_screen.dart';
@@ -16,6 +18,7 @@ class UserProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productData = Provider.of<ProductsProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Products'),
