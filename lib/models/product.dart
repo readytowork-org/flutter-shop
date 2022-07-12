@@ -25,17 +25,20 @@ class Product with ChangeNotifier {
     try {
       final url =
           "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products/${id}.json";
-                isFavourite = !isFavourite;
+      isFavourite = !isFavourite;
       notifyListeners();
       final response = await http.patch(
         Uri.parse(url),
-        body: jsonEncode(
+        body: json.encode(
           {
             "isFavourite": !isFavourite,
           },
         ),
       );
-
+      if (response.statusCode >= 400) {
+        isFavourite = oldStatus;
+        notifyListeners();
+      }
     } catch (e) {
       isFavourite = oldStatus;
       notifyListeners();

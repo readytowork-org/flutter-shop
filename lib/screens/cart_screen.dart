@@ -65,32 +65,58 @@ class CartScreen extends StatelessWidget {
               itemCount: cart.items.length,
             ),
           ),
-          cart.cartItemCount > 0
-              ? Container(
-                  height: 40,
-                  width: 120,
-                  margin: const EdgeInsets.only(bottom: 8),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: const StadiumBorder(),
-                    ),
-                    child: const Text(
-                      'Checkout',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    onPressed: () {
-                      Provider.of<Order>(context, listen: false).addOrder(
-                        cart.items.values.toList(),
-                        cart.totalAmount,
-                      );
-                      cart.clearCart();
-                      Navigator.of(context)
-                          .pushReplacementNamed(OrdersScreen.routeName);
-                    },
-                  ),
-                )
-              : Container(),
+          OrderButton(cart: cart),
         ],
+      ),
+    );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key? key,
+    required this.cart,
+  }) : super(key: key);
+
+  final Cart cart;
+
+  @override
+  State<OrderButton> createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var _isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      width: 120,
+      margin: const EdgeInsets.only(bottom: 8),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: const StadiumBorder(),
+        ),
+        onPressed: widget.cart.totalAmount <= 0 || _isLoading
+            ? null
+            : () async {
+                setState(() {
+                  _isLoading = true;
+                });
+                await Provider.of<Order>(context, listen: false).addOrder(
+                  widget.cart.items.values.toList(),
+                  widget.cart.totalAmount,
+                );
+                widget.cart.clearCart();
+                setState(() {
+                  _isLoading = false;
+                });
+              },
+        child: _isLoading
+            ? const CircularProgressIndicator()
+            : const Text(
+                'Checkout',
+                style: TextStyle(fontSize: 16),
+              ),
       ),
     );
   }

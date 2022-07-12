@@ -60,7 +60,7 @@ class ProductsProvider with ChangeNotifier {
     try {
       final response = await http.post(
         Uri.parse(url),
-        body: jsonEncode(
+        body: json.encode(
           {
             "title": product.title,
             "price": product.price,
@@ -72,7 +72,7 @@ class ProductsProvider with ChangeNotifier {
       );
       inspect(response);
       final newProduct = Product(
-        id: jsonDecode(response.body)["name"],
+        id: json.decode(response.body)["name"],
         title: product.title,
         description: product.description,
         price: product.price,
@@ -92,7 +92,7 @@ class ProductsProvider with ChangeNotifier {
           "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products/${id}.json";
       final response = await http.patch(
         Uri.parse(url),
-        body: jsonEncode(
+        body: json.encode(
           {
             "title": updateProduct.title,
             "price": updateProduct.price,
@@ -138,7 +138,7 @@ class ProductsProvider with ChangeNotifier {
         "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products.json";
     try {
       final response = await http.get(Uri.parse(url));
-      final loadedProducts = jsonDecode(response.body) as Map<String, dynamic>;
+      final loadedProducts = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> decodedProduct = [];
       loadedProducts.forEach((prodId, productData) {
         decodedProduct.add(Product(
