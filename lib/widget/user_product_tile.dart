@@ -36,15 +36,18 @@ class UserProductTile extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
           ),
           IconButton(
-            onPressed: () {
-              Provider.of<ProductsProvider>(context, listen: false)
-                  .deleteProduct(id!);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Item added to your cart."),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+            onPressed: () async {
+              try {
+                await Provider.of<ProductsProvider>(context, listen: false)
+                    .deleteProduct(id!);
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Deleting failed."),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              }
             },
             icon: const Icon(
               Icons.delete,
