@@ -138,8 +138,6 @@ class ProductsProvider with ChangeNotifier {
         "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products.json";
     try {
       final response = await http.get(Uri.parse(url));
-      print('From firebase');
-      inspect(response.body);
       final loadedProducts = jsonDecode(response.body) as Map<String, dynamic>;
       final List<Product> decodedProduct = [];
       loadedProducts.forEach((prodId, productData) {
@@ -149,6 +147,7 @@ class ProductsProvider with ChangeNotifier {
           description: productData['description'],
           price: productData['price'],
           imageUrl: productData['imageUrl'],
+          isFavourite: productData['isFavourite']
         ));
       });
       _items = decodedProduct;

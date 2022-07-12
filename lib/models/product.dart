@@ -1,6 +1,9 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
 
-class Product with ChangeNotifier{
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+
+class Product with ChangeNotifier {
   final String? id;
   final String? title;
   final String? description;
@@ -17,8 +20,26 @@ class Product with ChangeNotifier{
     this.isFavourite = false,
   });
 
-  void toggleFavouriteStatus(){
-    isFavourite = !isFavourite;
-    notifyListeners();
+  Future<void> toggleFavouriteStatus() async {
+    var oldStatus = isFavourite;
+    try {
+      final url =
+          "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products/${id}.json";
+                isFavourite = !isFavourite;
+      notifyListeners();
+      final response = await http.patch(
+        Uri.parse(url),
+        body: jsonEncode(
+          {
+            "isFavourite": !isFavourite,
+          },
+        ),
+      );
+
+    } catch (e) {
+      isFavourite = oldStatus;
+      notifyListeners();
+      throw e;
+    }
   }
 }

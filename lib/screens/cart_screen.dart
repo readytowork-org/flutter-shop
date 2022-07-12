@@ -65,27 +65,31 @@ class CartScreen extends StatelessWidget {
               itemCount: cart.items.length,
             ),
           ),
-          SizedBox(
-            height: 40,
-            width: 120,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: const StadiumBorder(),
-              ),
-              child: const Text(
-                'Checkout',
-                style: TextStyle(fontSize: 16),
-              ),
-              onPressed: () {
-                Provider.of<Order>(context, listen: false).addOrder(
-                  cart.items.values.toList(),
-                  cart.totalAmount,
-                );
-                cart.clearCart();
-                Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
-              },
-            ),
-          ),
+          cart.cartItemCount > 0
+              ? Container(
+                  height: 40,
+                  width: 120,
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const StadiumBorder(),
+                    ),
+                    child: const Text(
+                      'Checkout',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    onPressed: () {
+                      Provider.of<Order>(context, listen: false).addOrder(
+                        cart.items.values.toList(),
+                        cart.totalAmount,
+                      );
+                      cart.clearCart();
+                      Navigator.of(context)
+                          .pushReplacementNamed(OrdersScreen.routeName);
+                    },
+                  ),
+                )
+              : Container(),
         ],
       ),
     );
