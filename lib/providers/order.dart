@@ -91,7 +91,7 @@ class Order with ChangeNotifier {
                 .toList(),
             date: DateTime.parse(value['date'])));
       });
-      _orders = loadedOrders;
+      _orders = loadedOrders.reversed.toList();
       notifyListeners();
     } catch (e) {
       throw e;
