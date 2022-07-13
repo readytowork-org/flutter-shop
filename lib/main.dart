@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/screens/auth_screen.dart';
 
 /**Screens */
 import './screens/add_edit_product_screen.dart';
@@ -45,8 +46,9 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple)
                 .copyWith(secondary: Colors.orange),
             fontFamily: 'Lato'),
-        home: const ProductsOverViewScreen(),
+        home:  AuthScreen(),
         routes: {
+          ProductsOverViewScreen.routeName:(context) => const ProductsOverViewScreen(),
           ProductDetail.routeName: (context) => const ProductDetail(),
           CartScreen.routeName: (context) => const CartScreen(),
           OrdersScreen.routeName:(context) => const OrdersScreen(),
