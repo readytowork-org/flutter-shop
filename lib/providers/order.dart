@@ -20,7 +20,7 @@ class OrderItem {
 }
 
 class Order with ChangeNotifier {
-  final List<OrderItem> _orders = [];
+  late List<OrderItem> _orders = [];
 
   List<OrderItem> get orders {
     return [..._orders];
@@ -58,6 +58,40 @@ class Order with ChangeNotifier {
           date: DateTime.now(),
         ),
       );
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<void> getOrder() async {
+    const url =
+        "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json";
+    try {
+      final response = await http.get(Uri.parse(url));
+      final List<OrderItem> loadedOrders = [];
+      final extractedData = json.decode(response.body) as Map<String, dynamic>?;
+      if (extractedData == null) {
+        return;
+      }
+
+      extractedData.forEach((key, value) {
+        loadedOrders.add(OrderItem(
+            id: key,
+            amount: value['amount'],
+            products: (value['products'] as List<dynamic>)
+                .map(
+                  (item) => CartItem(
+                    id: item['id'],
+                    title: item['title'],
+                    quantity: item['quantity'],
+                    price: item['price'],
+                  ),
+                )
+                .toList(),
+            date: DateTime.parse(value['date'])));
+      });
+      _orders = loadedOrders;
       notifyListeners();
     } catch (e) {
       throw e;

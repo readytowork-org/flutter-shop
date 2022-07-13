@@ -24,7 +24,7 @@ class Product with ChangeNotifier {
     var oldStatus = isFavourite;
     try {
       final url =
-          "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products/${id}.json";
+          "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products/$id.json";
       isFavourite = !isFavourite;
       notifyListeners();
       final response = await http.patch(

@@ -34,10 +34,9 @@ class _OrderTileState extends State<OrderTile> {
                 setState(() {
                   _expanded = !_expanded;
                 });
-                print(_expanded);
               },
               icon: Icon(
-                _expanded ? Icons.expand_more : Icons.expand_less,
+                _expanded ? Icons.expand_less : Icons.expand_more,
               ),
             ),
           ),
