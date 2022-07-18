@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/auth.dart';
 
+import '../models/http_exception.dart';
+
 enum AuthMode { Signup, Login }
 
 class AuthScreen extends StatelessWidget {
@@ -100,6 +102,24 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
+  void showErrorMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Authentication failed"),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            onPressed: (){
+              Navigator.of(context).pop();
+            },
+            child: const Text("Close"),
+          )
+        ],
+      ),
+    );
+  }
+
   void _submit() async {
     if (!_formKey.currentState!.validate()) {
       // Invalid!
@@ -109,19 +129,40 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.Login) {
-      // Log user in
-      await Provider.of<Auth>(context, listen: false).login(
-        _authData["email"]!,
-        _authData["password"]!,
-      );
-    } else {
-      // Sign user up
-      await Provider.of<Auth>(context, listen: false).signup(
-        _authData['email']!,
-        _authData['password']!,
-      );
+    try {
+      if (_authMode == AuthMode.Login) {
+        // Log user in
+        await Provider.of<Auth>(context, listen: false).login(
+          _authData["email"]!,
+          _authData["password"]!,
+        );
+      } else {
+        // Sign user up
+        await Provider.of<Auth>(context, listen: false).signup(
+          _authData['email']!,
+          _authData['password']!,
+        );
+      }
+    } on HttpException catch (e) {
+      var errMessage = "Authentication failed";
+      if (e.toString().contains("EMAIL_NOT_FOUND")) {
+        errMessage = "User not found with given email";
+      } else if (e.toString().contains("INVALID_PASSWORD")) {
+        errMessage = "Password do not match";
+      } else if (e.toString().contains("USER_DISABLED")) {
+        errMessage = "User is disabled";
+      } else if (e.toString().contains("EMAIL_EXISTS")) {
+        errMessage = "The email address is already in use by another account.";
+      } else if (e.toString().contains("TOO_MANY_ATTEMPTS_TRY_LATER")) {
+        errMessage =
+            "We have blocked all requests from this device due to unusual activity. Try again later.";
+      }
+      showErrorMessage(errMessage);
+    } catch (e) {
+      var errMessage = "Authentication failed. Please try again later.";
+      showErrorMessage(errMessage);
     }
+
     setState(() {
       _isLoading = false;
     });
