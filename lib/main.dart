@@ -42,26 +42,28 @@ class MyApp extends StatelessWidget {
           create: (context) => Order(),
         ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple)
-                .copyWith(secondary: Colors.orange),
-            textTheme:
-                const TextTheme(bodyLarge: TextStyle(color: Colors.white)),
-            fontFamily: 'Lato'),
-        home: AuthScreen(),
-        routes: {
-          ProductsOverViewScreen.routeName: (context) =>
-              const ProductsOverViewScreen(),
-          ProductDetail.routeName: (context) => const ProductDetail(),
-          CartScreen.routeName: (context) => const CartScreen(),
-          OrdersScreen.routeName: (context) => const OrdersScreen(),
-          UserProductScreen.routeName: (context) => const UserProductScreen(),
-          AddEditProductScreen.routeName: (context) =>
-              const AddEditProductScreen()
-        },
+      child: Consumer<Auth>(
+        builder: (ctx, authData, _) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+              colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple)
+                  .copyWith(secondary: Colors.orange),
+              textTheme:
+                  const TextTheme(bodyLarge: TextStyle(color: Colors.white)),
+              fontFamily: 'Lato'),
+          home: authData.isAuth ? const ProductsOverViewScreen() : AuthScreen(),
+          routes: {
+            ProductsOverViewScreen.routeName: (context) =>
+                const ProductsOverViewScreen(),
+            ProductDetail.routeName: (context) => const ProductDetail(),
+            CartScreen.routeName: (context) => const CartScreen(),
+            OrdersScreen.routeName: (context) => const OrdersScreen(),
+            UserProductScreen.routeName: (context) => const UserProductScreen(),
+            AddEditProductScreen.routeName: (context) =>
+                const AddEditProductScreen()
+          },
+        ),
       ),
     );
   }

@@ -1,14 +1,28 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
 import "../models/http_exception.dart";
 
 class Auth with ChangeNotifier {
-  String? token;
-  DateTime? time;
-  String? userId;
+  String? _token;
+  DateTime? _expieryTime;
+  String? _userId;
   static const String _appKey = "AIzaSyAAisBCWejKaemIPKk1AGZca-PaB3pxhZw";
+
+  bool get isAuth {
+    return token != null;
+  }
+
+  String? get token {
+    if (_token != null &&
+        _expieryTime!.isAfter(DateTime.now()) &&
+        _userId != null) {
+      return _token!;
+    }
+    return null;
+  }
 
   _authenticate(String email, String password, String urlSegment) async {
     try {
@@ -24,8 +38,17 @@ class Auth with ChangeNotifier {
           },
         ),
       );
-      // print(json.decode(response.body));
+      // print(json.decode(response.body['expiresIn']));
+      // inspect(json.decode(response.body));
       final responseBody = json.decode(response.body);
+      _token = responseBody["idToken"];
+      _userId = responseBody["localId"];
+      _expieryTime = DateTime.now().add(
+        Duration(
+          seconds: int.parse(responseBody["expiresIn"]),
+        ),
+      );
+      notifyListeners();
       if (responseBody["error"] != null) {
         throw HttpException(responseBody["error"]["message"]);
       }
