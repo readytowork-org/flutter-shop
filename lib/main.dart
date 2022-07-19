@@ -31,10 +31,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => Auth(),
         ),
-        ChangeNotifierProvider(
-          create: (context) =>
-              ProductsProvider(), //use this if new object is created based on class to avoid bugs and efficency
+        //Pass additioinal params to screen
+        ChangeNotifierProxyProvider<Auth, ProductsProvider>(
+          create: (_) => ProductsProvider('', []),
+          update: (ctx, authData, previousProduct) => ProductsProvider(
+            authData.token,
+            previousProduct == null ? [] : previousProduct.items,
+          ),
         ),
+        // ChangeNotifierProvider(
+        //   create: (context) =>
+        //       ProductsProvider(), //use this if new object is created based on class to avoid bugs and efficency
+        // ),
         ChangeNotifierProvider(
           create: (context) => Cart(),
         ),
@@ -49,10 +57,12 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
               colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple)
                   .copyWith(secondary: Colors.orange),
-              textTheme:
-                  const TextTheme(bodyLarge: TextStyle(color: Colors.white)),
-              fontFamily: 'Lato'),
-          home: authData.isAuth ? const ProductsOverViewScreen() : AuthScreen(),
+              fontFamily: 'Lato',
+              textTheme: const TextTheme(
+                headline6: TextStyle(color: Colors.black),
+              ),
+              ),
+          home: authData.isAuth ?  const ProductsOverViewScreen() : AuthScreen(),
           routes: {
             ProductsOverViewScreen.routeName: (context) =>
                 const ProductsOverViewScreen(),

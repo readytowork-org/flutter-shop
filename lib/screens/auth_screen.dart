@@ -2,9 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/providers/auth.dart';
-
 import '../models/http_exception.dart';
+import 'package:shop_app/providers/auth.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -60,10 +59,10 @@ class AuthScreen extends StatelessWidget {
                           )
                         ],
                       ),
-                      child: Text(
+                      child: const Text(
                         'MyShop',
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge?.color,
+                        style:  TextStyle(
+                          color: Colors.white,
                           fontSize: 50,
                           fontFamily: 'Anton',
                           fontWeight: FontWeight.normal,

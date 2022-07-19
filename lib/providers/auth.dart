@@ -39,7 +39,7 @@ class Auth with ChangeNotifier {
         ),
       );
       // print(json.decode(response.body['expiresIn']));
-      // inspect(json.decode(response.body));
+      inspect(json.decode(response.body));
       final responseBody = json.decode(response.body);
       _token = responseBody["idToken"];
       _userId = responseBody["localId"];

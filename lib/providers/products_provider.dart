@@ -7,6 +7,7 @@ import '../models/product.dart';
 import 'package:http/http.dart' as http;
 
 class ProductsProvider with ChangeNotifier {
+  final String? token;
   late List<Product> _items = [
     // Product(
     //   id: 'p1',
@@ -41,6 +42,8 @@ class ProductsProvider with ChangeNotifier {
     //       'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
     // ),
   ];
+
+  ProductsProvider(this.token, this._items);
 
   List<Product> get items {
     return [..._items];
