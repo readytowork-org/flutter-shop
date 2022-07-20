@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../widget/drawer.dart';
 import '../widget/order_tile.dart';
-import '../providers/Order.dart';
+import '../providers/order.dart';
 
 class OrdersScreen extends StatelessWidget {
   static const routeName = '/orders-screen';
@@ -27,12 +27,10 @@ class OrdersScreen extends StatelessWidget {
               return const Center(child: Text('An error occurred'));
             } else {
               return Consumer<Order>(
-                builder: (context, orderData, child) => ListView.builder(
-                  itemBuilder: (ctx, i) => OrderTile(
-                    order: orderData.orders[i],
-                  ),
-                  itemCount: orderData.orders.length,
-                ),
+                builder: (ctx, orderData, child) => ListView.builder(
+                itemCount: orderData.orders.length,
+                itemBuilder: (ctx, i) => OrderTile(order: orderData.orders[i]),
+              ),
               );
             }
           }

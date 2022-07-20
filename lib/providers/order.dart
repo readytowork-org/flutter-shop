@@ -15,21 +15,25 @@ class OrderItem {
     required this.id,
     required this.amount,
     required this.products,
-    required this.date,
+    required this.date
   });
 }
 
 class Order with ChangeNotifier {
-  late List<OrderItem> _orders = [];
+  late List<OrderItem> _orders =[];
+  final String? token;
+
+  Order(this.token, this._orders);
 
   List<OrderItem> get orders {
     return [..._orders];
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
+    inspect(token);
     final dateTime = DateTime.now();
-    const url =
-        "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json";
+    final url =
+        "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json?auth=$token";
 
     try {
       final response = await http.post(
@@ -65,8 +69,8 @@ class Order with ChangeNotifier {
   }
 
   Future<void> getOrder() async {
-    const url =
-        "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json";
+    final url =
+        "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json?auth=$token";
     try {
       final response = await http.get(Uri.parse(url));
       final List<OrderItem> loadedOrders = [];

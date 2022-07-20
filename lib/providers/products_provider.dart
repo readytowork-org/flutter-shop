@@ -59,7 +59,7 @@ class ProductsProvider with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     final url =
-        "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?";
+        "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=$token";
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -92,7 +92,7 @@ class ProductsProvider with ChangeNotifier {
   Future<void> updateProduct(String id, Product updateProduct) async {
     try {
       final url =
-          "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products/${id}.json";
+          "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products/${id}.json?auth=$token";
       final response = await http.patch(
         Uri.parse(url),
         body: json.encode(
@@ -116,7 +116,7 @@ class ProductsProvider with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     final url =
-        "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products/${id}.json";
+        "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products/${id}.json?auth=$token";
     final productIndex = _items.indexWhere((item) => item.id == id);
     var existingProduct = _items[productIndex];
 

@@ -13,7 +13,7 @@ import './screens/auth_screen.dart';
 /**Providers */
 import './providers/cart.dart';
 import './providers/products_provider.dart';
-import './providers/Order.dart';
+import './providers/order.dart';
 import './providers/auth.dart';
 
 void main() {
@@ -46,23 +46,27 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => Cart(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => Order(),
-        ),
+        ChangeNotifierProxyProvider<Auth, Order>(
+          create: (_) => Order('', []),
+          update: (ctx, authData, previousOrder) => Order(authData.token!, []),
+        )
+        // ChangeNotifierProvider(
+        //   create: (context) => Order(),
+        // ),
       ],
       child: Consumer<Auth>(
         builder: (ctx, authData, _) => MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
-              colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple)
-                  .copyWith(secondary: Colors.orange),
-              fontFamily: 'Lato',
-              textTheme: const TextTheme(
-                headline6: TextStyle(color: Colors.black),
-              ),
-              ),
-          home: authData.isAuth ?  const ProductsOverViewScreen() : AuthScreen(),
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple)
+                .copyWith(secondary: Colors.orange),
+            fontFamily: 'Lato',
+            textTheme: const TextTheme(
+              headline6: TextStyle(color: Colors.black),
+            ),
+          ),
+          home: authData.isAuth ? const ProductsOverViewScreen() : AuthScreen(),
           routes: {
             ProductsOverViewScreen.routeName: (context) =>
                 const ProductsOverViewScreen(),

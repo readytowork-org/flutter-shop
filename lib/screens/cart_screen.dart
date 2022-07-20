@@ -2,8 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/Order.dart';
-import '../screens/orders_screen.dart';
+import '../providers/order.dart';
 import '../widget/cart_tile.dart';
 import '../providers/cart.dart';
 
