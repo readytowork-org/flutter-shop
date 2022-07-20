@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -20,28 +21,33 @@ class Product with ChangeNotifier {
     this.isFavourite = false,
   });
 
-  Future<void> toggleFavouriteStatus() async {
+  void _setFavStatus(bool newValue){
+    isFavourite = newValue;
+    notifyListeners();
+  }
+
+  Future<void> toggleFavouriteStatus(String token) async {
     var oldStatus = isFavourite;
+
+    final url =
+        "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products/$id.json?auth=$token";
+    isFavourite = !isFavourite;
+    notifyListeners();
+
     try {
-      final url =
-          "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products/$id.json";
-      isFavourite = !isFavourite;
-      notifyListeners();
       final response = await http.patch(
         Uri.parse(url),
         body: json.encode(
           {
-            "isFavourite": !isFavourite,
+            "isFavourite": isFavourite,
           },
         ),
       );
       if (response.statusCode >= 400) {
-        isFavourite = oldStatus;
-        notifyListeners();
+        _setFavStatus(isFavourite);
       }
     } catch (e) {
-      isFavourite = oldStatus;
-      notifyListeners();
+      _setFavStatus(oldStatus);
       throw e;
     }
   }
