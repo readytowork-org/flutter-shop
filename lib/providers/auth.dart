@@ -65,7 +65,7 @@ class Auth with ChangeNotifier {
           'expieryTime': _expieryTime!.toIso8601String(),
         },
       );
-      preference.setString("userData", userData);
+      await preference.setString("userData", userData);
       if (responseBody["error"] != null) {
         throw HttpException(responseBody["error"]["message"]);
       }
@@ -82,7 +82,25 @@ class Auth with ChangeNotifier {
     return _authenticate(email, password, "signInWithPassword");
   }
 
+  Future<bool> tryAutoLogin() async {
+    final preference = await SharedPreferences.getInstance();
+    if (!preference.containsKey('userData')) {
+      return false;
+    }
 
+    final extractedData =
+        json.decode(preference.getString("userData")!) as Map<String, dynamic>;
+    final expieryDate = DateTime.parse(extractedData["expieryTime"]);
+
+    if (expieryDate.isBefore(DateTime.now())) {
+      return false;
+    }
+    _expieryTime = expieryDate;
+    _token = extractedData['token'];
+    _userId = extractedData['userId'];
+    _autoLogout();
+    return true;
+  }
 
   void logout() {
     _token = null;
