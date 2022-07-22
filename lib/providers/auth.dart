@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-
+import "package:shared_preferences/shared_preferences.dart";
 import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
 import "../models/http_exception.dart";
@@ -57,6 +57,15 @@ class Auth with ChangeNotifier {
       );
       _autoLogout();
       notifyListeners();
+      final preference = await SharedPreferences.getInstance();
+      final userData = json.encode(
+        {
+          'token': _token,
+          'userId': _userId,
+          'expieryTime': _expieryTime!.toIso8601String(),
+        },
+      );
+      preference.setString("userData", userData);
       if (responseBody["error"] != null) {
         throw HttpException(responseBody["error"]["message"]);
       }
@@ -72,6 +81,8 @@ class Auth with ChangeNotifier {
   Future<void> login(String email, String password) async {
     return _authenticate(email, password, "signInWithPassword");
   }
+
+
 
   void logout() {
     _token = null;
