@@ -51,6 +51,7 @@ class SideDrawer extends StatelessWidget {
           const Divider(),
           _buildDrawer("Logout", Icons.exit_to_app, () {
             Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed('/');
             Provider.of<Auth>(context, listen: false).logout();
           }),
           const Divider(),

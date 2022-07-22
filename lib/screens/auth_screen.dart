@@ -61,7 +61,7 @@ class AuthScreen extends StatelessWidget {
                       ),
                       child: const Text(
                         'MyShop',
-                        style:  TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
                           fontSize: 50,
                           fontFamily: 'Anton',
@@ -109,9 +109,7 @@ class _AuthCardState extends State<AuthCard> {
         content: Text(message),
         actions: <Widget>[
           TextButton(
-            onPressed: (){
-              Navigator.of(context).pop();
-            },
+            onPressed: () => Navigator.of(context).pop(),
             child: const Text("Close"),
           )
         ],

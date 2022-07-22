@@ -57,7 +57,7 @@ class Auth with ChangeNotifier {
       );
       _autoLogout();
       notifyListeners();
-      final preference = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
       final userData = json.encode(
         {
           'token': _token,
@@ -65,11 +65,13 @@ class Auth with ChangeNotifier {
           'expieryTime': _expieryTime!.toIso8601String(),
         },
       );
-      await preference.setString("userData", userData);
+      await prefs.setString("userData", userData);
       if (responseBody["error"] != null) {
         throw HttpException(responseBody["error"]["message"]);
       }
     } catch (error) {
+      print("login");
+      print(error);
       throw error;
     }
   }
@@ -98,14 +100,20 @@ class Auth with ChangeNotifier {
     _expieryTime = expieryDate;
     _token = extractedData['token'];
     _userId = extractedData['userId'];
+    notifyListeners();
     _autoLogout();
+
     return true;
   }
 
-  void logout() {
+  void logout() async {
     _token = null;
     _expieryTime = null;
     _userId = null;
+
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove("userData");
 
     if (_authTimer != null) {
       _authTimer!.cancel();
