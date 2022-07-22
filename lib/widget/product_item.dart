@@ -61,7 +61,10 @@ class ProductItem extends StatelessWidget {
               icon: Icon(
                 product.isFavourite ? Icons.favorite : Icons.favorite_border,
               ),
-              onPressed: () => product.toggleFavouriteStatus(authData.token!),
+              onPressed: () => product.toggleFavouriteStatus(
+                authData.token!,
+                authData.userId!,
+              ),
               color: Theme.of(context).colorScheme.secondary,
             ),
           ),
@@ -74,11 +77,13 @@ class ProductItem extends StatelessWidget {
                 SnackBar(
                   content: const Text("Item added to your cart."),
                   duration: const Duration(seconds: 2),
-                  action: SnackBarAction(label: 'Undo', onPressed: (){
-                    cart.removeSingleItem(product.id.toString());
-                  },),
+                  action: SnackBarAction(
+                    label: 'Undo',
+                    onPressed: () {
+                      cart.removeSingleItem(product.id.toString());
+                    },
+                  ),
                 ),
-                
               );
             },
             color: Theme.of(context).colorScheme.secondary,

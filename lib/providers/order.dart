@@ -30,7 +30,7 @@ class Order with ChangeNotifier {
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    inspect(token);
+    // inspect(token);
     final dateTime = DateTime.now();
     final url =
         "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json?auth=$token";

@@ -33,9 +33,10 @@ class MyApp extends StatelessWidget {
         ),
         //Pass additioinal params to screen
         ChangeNotifierProxyProvider<Auth, ProductsProvider>(
-          create: (_) => ProductsProvider('', []),
+          create: (_) => ProductsProvider('', '', []),
           update: (ctx, authData, previousProduct) => ProductsProvider(
             authData.token,
+            authData.userId,
             previousProduct == null ? [] : previousProduct.items,
           ),
         ),

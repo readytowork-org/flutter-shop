@@ -24,6 +24,10 @@ class Auth with ChangeNotifier {
     return null;
   }
 
+  String? get userId {
+    return _userId;
+  }
+
   _authenticate(String email, String password, String urlSegment) async {
     try {
       final url =
@@ -39,7 +43,7 @@ class Auth with ChangeNotifier {
         ),
       );
       // print(json.decode(response.body['expiresIn']));
-      inspect(json.decode(response.body));
+      // inspect(json.decode(response.body));
       final responseBody = json.decode(response.body);
       _token = responseBody["idToken"];
       _userId = responseBody["localId"];

@@ -60,7 +60,7 @@ class Cart with ChangeNotifier {
         ),
       );
     }
-    inspect(_items);
+    // inspect(_items);
 
     notifyListeners();
   }

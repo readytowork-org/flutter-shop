@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 class ProductsProvider with ChangeNotifier {
   final String? token;
+  final String? userId;
   late List<Product> _items = [
     // Product(
     //   id: 'p1',
@@ -43,7 +44,7 @@ class ProductsProvider with ChangeNotifier {
     // ),
   ];
 
-  ProductsProvider(this.token, this._items);
+  ProductsProvider(this.token, this.userId, this._items);
 
   List<Product> get items {
     return [..._items];
@@ -68,12 +69,10 @@ class ProductsProvider with ChangeNotifier {
             "title": product.title,
             "price": product.price,
             "description": product.description,
-            "isFavourite": product.isFavourite,
             "imageUrl": product.imageUrl
           },
         ),
       );
-      inspect(response);
       final newProduct = Product(
         id: json.decode(response.body)["name"],
         title: product.title,
@@ -137,25 +136,36 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url =
-        "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=$token";
     try {
+      var url =
+          "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=$token";
       final response = await http.get(Uri.parse(url));
-      final loadedProducts = json.decode(response.body) as Map<String, dynamic>?;
+      url =
+          "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/userFavourites/$userId.json?auth=$token";
+      final favouriteResponse = await http.get(Uri.parse(url));
+
+      final favouriteData = json.decode(favouriteResponse.body);
+      final loadedProducts =
+          json.decode(response.body) as Map<String, dynamic>?;
+
       if (loadedProducts == null) {
         return;
       }
       final List<Product> decodedProduct = [];
-      loadedProducts.forEach((prodId, productData) {
-        decodedProduct.add(Product(
-          id: prodId,
-          title: productData['title'],
-          description: productData['description'],
-          price: productData['price'],
-          imageUrl: productData['imageUrl'],
-          isFavourite: productData['isFavourite']
-        ));
-      });
+      loadedProducts.forEach(
+        (prodId, productData) {
+          decodedProduct.add(
+            Product(
+              id: prodId,
+              title: productData['title'],
+              description: productData['description'],
+              price: productData['price'],
+              imageUrl: productData['imageUrl'],
+              isFavourite: favouriteData == null ? false : favouriteData[prodId] ?? false,
+            ),
+          );
+        },
+      );
       _items = decodedProduct;
       notifyListeners();
     } catch (e) {
