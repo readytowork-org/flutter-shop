@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -9,6 +10,8 @@ class Auth with ChangeNotifier {
   String? _token;
   DateTime? _expieryTime;
   String? _userId;
+  Timer? _authTimer;
+
   static const String _appKey = "AIzaSyAAisBCWejKaemIPKk1AGZca-PaB3pxhZw";
 
   bool get isAuth {
@@ -52,6 +55,7 @@ class Auth with ChangeNotifier {
           seconds: int.parse(responseBody["expiresIn"]),
         ),
       );
+      _autoLogout();
       notifyListeners();
       if (responseBody["error"] != null) {
         throw HttpException(responseBody["error"]["message"]);
@@ -69,10 +73,27 @@ class Auth with ChangeNotifier {
     return _authenticate(email, password, "signInWithPassword");
   }
 
-  void logout(){
+  void logout() {
     _token = null;
-    _expieryTime =null;
+    _expieryTime = null;
     _userId = null;
+
+    if (_authTimer != null) {
+      _authTimer!.cancel();
+      _authTimer = null;
+    }
+
     notifyListeners();
+  }
+
+  void _autoLogout() {
+    if (_authTimer != null) {
+      _authTimer!.cancel();
+    }
+    final timeToLogout = _expieryTime!.difference(DateTime.now()).inSeconds;
+    _authTimer = Timer(
+      Duration(seconds: timeToLogout),
+      logout,
+    );
   }
 }
