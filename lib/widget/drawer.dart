@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth.dart';
 import '../screens/user_product_screen.dart';
 import '../screens/orders_screen.dart';
 
@@ -46,7 +48,12 @@ class SideDrawer extends StatelessWidget {
             Navigator.of(context)
                 .pushReplacementNamed(UserProductScreen.routeName);
           }),
-          const Dialog(),
+          const Divider(),
+          _buildDrawer("Logout", Icons.exit_to_app, () {
+            Navigator.of(context).pop();
+            Provider.of<Auth>(context, listen: false).logout();
+          }),
+          const Divider(),
         ],
       ),
     );
