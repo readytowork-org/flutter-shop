@@ -135,10 +135,12 @@ class ProductsProvider with ChangeNotifier {
     // notifyListeners();
   }
 
-  Future<void> fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
     try {
+      final filterQuery = filterByUser ? '&orderBy="creatorId"&equalTo="$userId"' : '';
+
       var url =
-          'https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=$token&orderBy="creatorId"&equalTo="$userId"';
+          'https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=$token&$filterQuery';
       final response = await http.get(Uri.parse(url));
       url =
           "https://flutter-course-2ea1b-default-rtdb.asia-southeast1.firebasedatabase.app/userFavourites/$userId.json?auth=$token";
@@ -161,7 +163,9 @@ class ProductsProvider with ChangeNotifier {
               description: productData['description'],
               price: productData['price'],
               imageUrl: productData['imageUrl'],
-              isFavourite: favouriteData == null ? false : favouriteData[prodId] ?? false,
+              isFavourite: favouriteData == null
+                  ? false
+                  : favouriteData[prodId] ?? false,
             ),
           );
         },
