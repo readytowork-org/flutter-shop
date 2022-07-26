@@ -124,20 +124,8 @@ class _AuthCardState extends State<AuthCard>
         curve: Curves.linear,
       ),
     );
-    _heightAnimation.addListener(() {
-      setState(() {
-        
-      });
-     });
   }
 
-@override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    _controller.dispose();
-  }
-  
   void showErrorMessage(String message) {
     showDialog(
       context: context,
@@ -224,14 +212,18 @@ class _AuthCardState extends State<AuthCard>
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
-      child: Container(
-        // height: _authMode == AuthMode.Signup ? 320 : 260,
-        height: _heightAnimation.value.height,
-        constraints: BoxConstraints(
-          minHeight: _heightAnimation.value.height,
+      child: AnimatedBuilder(
+        animation: _heightAnimation,
+        builder: (ctx, childForm) => Container(
+          // height: _authMode == AuthMode.Signup ? 320 : 260,
+          height: _heightAnimation.value.height,
+          constraints: BoxConstraints(
+            minHeight: _heightAnimation.value.height,
+          ),
+          width: deviceSize.width * 0.75,
+          padding: const EdgeInsets.all(16.0),
+          child: childForm,
         ),
-        width: deviceSize.width * 0.75,
-        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -295,6 +287,8 @@ class _AuthCardState extends State<AuthCard>
                   ),
                 TextButton(
                   onPressed: _switchAuthMode,
+                  style:
+                      TextButton.styleFrom(backgroundColor: Colors.transparent),
                   child: Text(
                       '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
                 ),
