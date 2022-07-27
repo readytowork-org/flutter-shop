@@ -42,12 +42,14 @@ class SideDrawer extends StatelessWidget {
           }),
           const Divider(),
           _buildDrawer("Orders", Icons.payment, () {
-            // Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
-            Navigator.of(context).pushReplacement(
-              CustomRoute(
-                builder: (ctx) => const OrdersScreen(),
-              ),
-            );
+            Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+
+            //Animation for per route
+            // Navigator.of(context).pushReplacement(
+            //   CustomRoute(
+            //     builder: (ctx) => const OrdersScreen(),
+            //   ),
+            // );
           }),
           const Divider(),
           _buildDrawer("Manage Products", Icons.edit, () {

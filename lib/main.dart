@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/** Helpers */
+import './helpers/custom_route.dart';
+
 /**Screens */
 import './screens/add_edit_product_screen.dart';
 import './screens/user_product_screen.dart';
@@ -67,6 +70,12 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Lato',
             textTheme: const TextTheme(
               headline6: TextStyle(color: Colors.black),
+            ),
+            pageTransitionsTheme: PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: CustomPageTransistionBuilder(),
+                TargetPlatform.iOS: CustomPageTransistionBuilder(),
+              },
             ),
           ),
           home: authData.isAuth
