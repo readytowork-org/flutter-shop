@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../helpers/custom_route.dart';
 import '../providers/auth.dart';
 import '../screens/user_product_screen.dart';
 import '../screens/orders_screen.dart';
@@ -41,7 +42,12 @@ class SideDrawer extends StatelessWidget {
           }),
           const Divider(),
           _buildDrawer("Orders", Icons.payment, () {
-            Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+            // Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+            Navigator.of(context).pushReplacement(
+              CustomRoute(
+                builder: (ctx) => const OrdersScreen(),
+              ),
+            );
           }),
           const Divider(),
           _buildDrawer("Manage Products", Icons.edit, () {
