@@ -16,60 +16,64 @@ class ProductDetail extends StatelessWidget {
       //edited, deletedd. Default set to true
     ).findById(id);
     return Scaffold(
-        appBar: AppBar(
-          title: Text(product.title!),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 300,
-                width: double.infinity,
-                child: Hero(
-                  tag: product.id!,
-                  child: Image.network(
-                    product.imageUrl!,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+        body: CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          expandedHeight: 300,
+          pinned: true,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text(product.title!),
+            background: Hero(
+              tag: product.id!,
+              child: Image.network(
+                product.imageUrl!,
+                fit: BoxFit.cover,
               ),
-              const SizedBox(
-                height: 16,
-              ),
-              Text(
-                '\$${product.price}',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Text(
-                '${product.description}',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-                        SizedBox(
-                height: 40,
-                width: 150,
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.shopping_cart),
-                  label: const Text("Add to cart"),
-                  style: ElevatedButton.styleFrom(
-                    shape: const StadiumBorder(),
-                  ),
-                  onPressed: () {
-                    Provider.of<Cart>(context, listen: false).addItem(product.id!, product.price!, product.title!);
-                  },
-                ),
-              ),
-            ],
+            ),
           ),
-        ));
+        ),
+        SliverList(
+            delegate: SliverChildListDelegate(
+          [
+            const SizedBox(
+              height: 16,
+            ),
+            Text(
+              '\$${product.price}',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Text(
+              '${product.description}',
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Column(
+              children: <Widget>[
+                ElevatedButton.icon(
+                icon: const Icon(Icons.shopping_cart),
+                label: const Text("Add to cart"),
+                style: ElevatedButton.styleFrom(
+                  shape: const StadiumBorder(),
+                ),
+                onPressed: () {
+                  Provider.of<Cart>(context, listen: false)
+                      .addItem(product.id!, product.price!, product.title!);
+                },
+              ),
+              ],
+            ),
+            const SizedBox(
+              height: 500,
+            )
+          ],
+        )),
+      ],
+    ));
   }
 }
